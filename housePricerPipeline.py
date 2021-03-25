@@ -93,5 +93,3 @@ if __name__ == '__main__' :
     mlpipe.preprocessData()
     mlpipe.trainModel()
     mlpipe.train_and_writeOutput()
-
-    check = 0
