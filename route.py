@@ -39,7 +39,7 @@ def predict_house_value():
     print("input type " , type(input))
 
     #return jsonify(uploaded_data)
-    loaded_model = pickle.load(open('finalized_model.pkl', 'rb'))
+    loaded_model = pickle.load(open('../finalized_model.pkl', 'rb'))
     # predicttions = loaded_model.score(mlpipe.Xtest, mlpipe.Ytest)
     predictions = loaded_model.predict(input.reshape(1, -1))
     print(predictions)
