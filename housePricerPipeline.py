@@ -1,16 +1,17 @@
 from sklearn.model_selection import train_test_split 
 import sklearn.ensemble
-import numpy as np,scipy as sp
+import numpy as np
 from sklearn.datasets import load_boston
 import pickle
 import pandas as pd
 from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import MinMaxScaler
 
 ## Set ML - (training, validation, test ) - Sets ratio - splits
 
 VALIDATION_PERCENTAGE_SPLIT = 0.2    
 TEST_PERCENTAGE_SPLIT       = 0.2
-TRAINING_PERCENTAGE_SPLIT   = 1.0 - ( VALIDATION_PERCENTAGE_SPLIT + TEST_PERCENTAGE_SPLIT)
+# TRAINING_PERCENTAGE_SPLIT   = 1.0 - ( VALIDATION_PERCENTAGE_SPLIT + TEST_PERCENTAGE_SPLIT)
 
 ## These constants are fixed to the boston dataset , which is known in advance , but can be a variable number that is read in at runtime (cmd line param or config file etc.) \ 
 #  just as easily - for genralization to other datasets going forward
@@ -44,13 +45,17 @@ class ml_pipeline:
         print('in clean_data() member function')
 
         # calc max value in the dataset and scale - minimax
-        Max = float(np.max(self.input_raw_data_mat))
-        Min = float(np.min(self.input_raw_data_mat))
+        # self.Max = float(np.max(self.input_raw_data_mat))
+        # self.Min = float(np.min(self.input_raw_data_mat))
 
-        if (Max != Min) :
-            self.stdized_input_raw_data_mat = self.input_raw_data_mat/(Max - Min)
-        else:
-            self.stdized_input_raw_data_mat = self.input_raw_data_mat/ Max
+        # if (self.Max != self.Min) :
+        #     self.stdized_input_raw_data_mat = self.input_raw_data_mat/(self.Max - self.Min)
+        # else:
+        #     self.stdized_input_raw_data_mat = self.input_raw_data_mat/ self.Max
+
+        self.scaler = MinMaxScaler()
+        self.scaler.fit(self.input_raw_data_mat)
+        self.stdized_input_raw_data_mat = self.scaler.transform(self.input_raw_data_mat)
 
 
     def trainModel(self ): #, input_file=self.stdized_input_raw_data_mat):   
@@ -77,10 +82,10 @@ class ml_pipeline:
         filename = 'finalized_model.pkl'
         pickle.dump(model, open(filename, 'wb'))
 
-if __name__ == '__main__' :
+# if __name__ == '__main__' :
 
-    mlpipe  = ml_pipeline()
-    mlpipe.readInput()
-    mlpipe.preprocessData()
-    mlpipe.trainModel()
-    mlpipe.train_and_writeOutput()
+#     mlpipe  = ml_pipeline()
+#     mlpipe.readInput()
+#     mlpipe.preprocessData()
+#     mlpipe.trainModel()
+#     mlpipe.train_and_writeOutput()
